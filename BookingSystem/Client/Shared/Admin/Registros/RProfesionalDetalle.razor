@@ -1,0 +1,106 @@
+﻿@page "/R_ProfesionalDetalle"
+@inject IProfesionalRepositorio ProfesionalRepo;
+@inject IServicioRepositorio ServicioRepo;
+@inject IProfesionalDetalleRepositorio DetalleRepo;
+<EditForm Model="profesionalDetalle" OnSubmit="Guardar">
+    @*Detalle Expedientes*@
+    <div class="card">
+        <div class="card-header">
+            <h3>Detalle Profesional</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group d-flex align-items-end">
+
+                <div class="flex-fill mx-2">
+                    <label>Profesional</label>
+                    <InputSelect @bind-Value="profesionalDetalle.ProfesionalId" class="form-select text-14">
+                        <option></option>
+                        @foreach (var item in Profe)
+                        {
+
+                            <option value="@item.ProfesionalId">@item.NombreCompleto</option>
+                        }
+
+
+                    </InputSelect>
+
+                </div>
+                <div class="flex-fill mx-2">
+                    <label>Servicio</label>
+                    <InputSelect @bind-Value="profesionalDetalle.ServicioId" class="form-select text-14">
+                        <option></option>
+                        @foreach (var item in servicios)
+                        {
+
+                            <option value="@item.ServicioId">@item.Nombre</option>
+                        }
+
+                    </InputSelect>
+                </div>
+                <button type="button" class="btn btn-lg btn-primary oi oi-plus"
+                @onclick="Agregar">
+                    Add
+                </button>
+
+            </div>
+
+            <br>
+
+            <table class="table table-secondary">
+                <thead class="thead-dark">
+                    <tr class="table-info">
+                        <th>Profesional</th>
+                        <th>Servicio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in profesionalDetalles)
+                    {
+                        <tr>
+                            <td>@item.ProfesionalId</td>
+                            <td>@item.ServicioId</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public int ProfesionalId { get; set; }
+
+    public bool eliminado { get; set; }
+    private Profesional profesional = new Profesional();
+    private ProfesionalDetalle profesionalDetalle = new ProfesionalDetalle();
+    private List<ProfesionalDetalle> profesionalDetalles = new List<ProfesionalDetalle>();
+    private List<Servicio> servicios = new List<Servicio>();
+    private List<Profesional> Profe = new List<Profesional>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        servicios = await ServicioRepo.GetServicio();
+        Profe= await ProfesionalRepo.GetProfesional();
+
+        // Asignar el valor del ProfesionalId al modelo profesionalDetalle
+    }
+    public async Task Agregar()
+    {
+        var nuevoDetalle = new ProfesionalDetalle
+            {
+                ProfesionalId = profesionalDetalle.ProfesionalId,
+                ServicioId = profesionalDetalle.ServicioId
+            };
+        await DetalleRepo.CreateProfesionalDetalle(nuevoDetalle);
+        profesionalDetalles.Add(nuevoDetalle);
+        
+
+        // Limpia el objeto profesionalDetalle para futuras adiciones
+        profesionalDetalle = new ProfesionalDetalle();
+    }
+    public void RemoverFila(ProfesionalDetalle item) { }
+    public void Guardar(){}
+
+
+}

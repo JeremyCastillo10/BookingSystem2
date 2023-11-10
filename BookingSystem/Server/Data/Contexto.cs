@@ -6,12 +6,15 @@ using Microsoft.Extensions.Options;
 
 namespace BookingSystem.Server.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
+    public class Contexto : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
+        public Contexto(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
+        public DbSet<Profesional> Profesional { get; set; }
+        public DbSet<Servicio> Servicio { get; set; }
+        public DbSet<ProfesionalDetalle> ProfesionalDetalle { get; set; }
     }
 }

@@ -1,0 +1,136 @@
+﻿@page "/R_Servicios"
+@page "/R_Servicios/{ServicioId:int}"
+@inject SweetAlertService swal;
+@inject IServicioRepositorio ServicioRepo;
+<EditForm Model="servicio" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+<div class="form-group row">
+   <div class="border p-3 w-75" style="margin: 0 auto; width: 50%;">
+        <h2 class="text-info pl-3">Registro Servicios</h2>
+        <div class="row">
+        <div class="container">
+
+                    <MudTextField hidden @bind-Value="servicio.ServicioId" class="" />
+                    <div class="mb-3">
+                        <label>Nombre</label>
+                        <MudTextField @bind-Value="servicio.Nombre" class="" />
+                        <ValidationMessage For="@(() => servicio.Nombre)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Descripcion</label>
+                        <MudTextField @bind-Value="servicio.Descripcion" class="" />
+                        <ValidationMessage For="@(() => servicio.Descripcion)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Duracion</label>
+                        <MudTextField @bind-Value="servicio.Duracion" class="" />
+                        <ValidationMessage For="@(() => servicio.Duracion)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Precio</label>
+                        <MudNumericField @bind-Value="servicio.Precio" class="" />
+                        <ValidationMessage For="@(() => servicio.Precio)" />
+                    </div>
+      <MudIconButton Icon="@Icons.Material.Filled.Save" aria-label="Guardar" ButtonType="MudBlazor.ButtonType.Submit"></MudIconButton>
+      <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="Eliminar"></MudIconButton>
+      
+    </div>
+   </div>
+   </div>
+   </div>
+</EditForm>
+@if (eliminado)
+{
+    <p>El servicio ha sido eliminado con éxito.</p>
+}
+
+@code {
+    [Parameter]
+    public int ServicioId { get; set; }
+    private bool eliminado = false;
+    private Servicio servicio = new Servicio();
+    private bool servicioExiste = false;
+    protected override async Task OnInitializedAsync()
+    {
+        if (ServicioId != 0)
+        {
+            servicio = await ServicioRepo.GetServicioPorIdAsync(ServicioId);
+        }
+    }
+    private async Task Guardar()
+    {
+        if (servicio.ServicioId == 0)
+        {
+            await ServicioRepo.CreateServicio(servicio);
+            Nuevo();
+            alert();
+        }
+        else
+        {
+            await ServicioRepo.UpdateServicio(servicio);
+            Nuevo();
+            alert1();
+        }
+
+    }
+
+    private async Task Buscar()
+    {
+        servicio = await ServicioRepo.GetServicioPorIdAsync(servicio.ServicioId);
+    }
+
+    private async Task Eliminar()
+    {
+
+        if (servicio!= null)
+        {
+
+            eliminado = await ServicioRepo.DeleteServicio(servicio.ServicioId);
+            alert3();
+            if (eliminado)
+            {
+
+                Nuevo();
+            }
+        }
+    }
+    public void Nuevo()
+    {
+        servicio = new Servicio();
+    }
+    public async void alert()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+        {
+           Title = "Exito",
+           Text ="Guardado con exito!!!",
+           Icon = SweetAlertIcon.Success,
+           ConfirmButtonText ="OK"
+
+        });
+    }
+    public async void alert1()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Exito",
+                Text = "Editado con exito!!!",
+                Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+    public async void alert3()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Estas Seguro?",
+                Text = "No podras revertirlo",
+                Icon = SweetAlertIcon.Warning,
+                ConfirmButtonText ="Si, Eliminar",
+                ShowCancelButton = true,
+                CancelButtonText="No"
+            });
+    }
+
+}

@@ -1,0 +1,101 @@
+﻿@page "/PageServicio"
+
+@inject IServicioRepositorio ServicioRepositorio
+
+
+<MudCard>
+<EditForm Model="lista">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header" style="background-color:lightblue">
+            <h3>Servicios</h3>
+        </div>
+            
+        <div class="card-body">
+            <form>
+                <div class="input-group d-flex align-items-end">
+                    <div class="flex-fill mx-2">
+                        <label>Filtro</label>
+                        <MudSelect @bind-Value="Filtro">
+                            <MudSelectItem Value=@("0")>Id</MudSelectItem>
+                            <MudSelectItem Value=@("1")>Nombre</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="flex-fill mx-2">
+                        <label>Criterio</label>
+                        <MudTextField @bind-Value="Criterio" />
+                    </div>
+                    <button type="button" class="btn btn-warning" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2"> Buscar</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr class="table">
+                    <th>Servicio Id</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Duración</th>
+                    <th>Precio</th>
+                        <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in lista)
+                {
+                    <tr>
+                        <td>@item.ServicioId</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                        <td>@item.Duracion</td>
+                        <td>@item.Precio</td>
+                            <td class="text-center">
+                                <div class="w-30 btn-group">
+                                    <a><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a class="btn btn-sm btn-outline-primary oi oi-eye" href="R_Servicios/@item.ServicioId">Ver</a>
+                                </div>
+                            </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+</MudCard>
+
+@code {
+    public string? Filtro { get; set; }
+    public string? Criterio { get; set; }
+    public List<Servicio> lista { get; set; } = new List<Servicio>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        lista = await ServicioRepositorio.GetServicio();
+    }
+
+
+    private async Task Buscar()
+    {
+        if (Criterio != null)
+        {
+            lista = await ServicioRepositorio.GetServicio();
+            switch (Filtro)
+            {
+                case "0":
+                    lista = lista.Where(s => s.ServicioId == int.Parse(Criterio)).ToList();
+                    break;
+
+                case "1":
+                    lista = lista.Where(s => s.Nombre.ToLower().Contains(Criterio.ToLower())).ToList();
+                    break;
+            }
+        }
+        else
+        {
+            lista = await ServicioRepositorio.GetServicio();
+        }
+    }
+
+}

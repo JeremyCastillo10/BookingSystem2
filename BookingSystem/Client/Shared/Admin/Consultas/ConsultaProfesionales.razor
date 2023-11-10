@@ -1,0 +1,140 @@
+﻿@inject IProfesionalRepositorio ProfesionalRepo;
+@inject IServicioRepositorio ServicioRepo;
+@inject IProfesionalDetalleRepositorio DetalleRepo;
+@using BookingSystem.Client.Shared.Admin.Registros
+
+<CardBody>
+<EditForm Model="lista">
+    <DataAnnotationsValidator />
+        <div class="card">
+            <div class="card-header" style="background-color:lightblue">
+            <h3>Profesionales</h3>
+
+        </div>
+        <br/>
+        <div class="card-body">
+            <form>
+                <div class="input-group d-flex align-items-end">
+                    <div class="flex-fill mx-2">
+                        <label>Filtro</label>
+                        <MudSelect @bind-Value="Filtro">
+                                <MudSelectItem Value=@("0")>Id</MudSelectItem>
+                                <MudSelectItem Value=@("1")>Especialidad</MudSelectItem>
+                        </MudSelect>
+                    </div>
+                    <div class="flex-fill mx-2">
+                        <label>Criterio</label>
+                        <MudTextField @bind-Value="Criterio"/>
+                    </div>
+                    <button type="button" class="btn btn-warning" @onclick="Buscar">
+                        <i class="oi oi-magnifying-glass mr-2"> Buscar</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr class="table">
+                    <th>Nombre</th>
+                    <th>Especialidad</th>
+                    <th>Servicio</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pro in lista)
+                {
+                    if (pro.Visible == true)
+                    {
+                        <tr>
+                            <td>@pro.NombreCompleto</td>
+                            <td>@pro.Especialidad</td>
+                            <td>
+                                <ul>
+                                    @foreach (var detalle in ProfesionalesDetalles.Where(d => d.ProfesionalId == pro.ProfesionalId))
+                                    {
+                                        var servicio = servicios.FirstOrDefault(s => s.ServicioId == detalle.ServicioId);
+                                        if (servicio != null)
+                                        {
+                                                <li>@servicio.Nombre <MudIconButton Icon="@Icons.Material.Filled.Clear" aria-label="delete" OnClick="() => Eliminarpro(detalle.DetalleId) "></MudIconButton></li>
+
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                            <td class="text-center">
+                                <div class="w-30 btn-group">
+                                    <a><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a class="btn btn-sm btn-outline-primary oi oi-eye" href="R_Profesionales/@pro.ProfesionalId">Ver</a>
+                                </div>
+                            </td>
+                        </tr>
+                            
+
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</EditForm>
+</CardBody>
+
+@code {
+    public string? Filtro { get; set; }
+    public string? Criterio { get; set; }
+    private int ProfesionalId { get; set; }
+    private ProfesionalDetalle profesional = new ProfesionalDetalle();
+    public List<Profesional> lista { get; set; } = new List<Profesional>();
+    private List<ProfesionalDetalle> ProfesionalesDetalles = new List<ProfesionalDetalle>();
+    private List<Servicio> servicios = new List<Servicio>();
+    public bool eliminado { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        lista = await ProfesionalRepo.GetProfesional();
+        ProfesionalesDetalles = await DetalleRepo.GetProfesionalDetalles();
+        servicios = await ServicioRepo.GetServicio();
+        if (ProfesionalId != 0)
+        {
+            profesional = await DetalleRepo.GetProfesionalDetallePorIdAsync(ProfesionalId);
+        }
+    }
+
+    private async Task Buscar()
+    {
+        if (Criterio != null)
+        {
+            lista = await ProfesionalRepo.GetProfesional();
+            switch (Filtro)
+            {
+                case "0":
+                    lista = lista.Where(s => s.ProfesionalId == int.Parse(Criterio)).ToList();
+                    break;
+
+                case "1":
+                    lista = lista.Where(s => s.Especialidad.ToLower().Contains(Criterio.ToLower())).ToList();
+                    break;
+            }
+        }
+        else
+        {
+            lista = await ProfesionalRepo.GetProfesional();
+        }
+    }
+
+
+    private async Task Eliminarpro(int detale)
+    {
+        if (profesional != null)
+        {
+            eliminado = await DetalleRepo.DeleteProfesionalDetalle(profesional.DetalleId);
+            if (eliminado)
+            {
+               
+            }
+        }
+    }
+
+}

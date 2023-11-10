@@ -1,0 +1,159 @@
+﻿@page "/R_Profesionales"
+@page "/R_Profesionales/{ProfesionalId:int}"
+@inject IProfesionalRepositorio ProfesionalRepo;
+@inject IServicioRepositorio ServicioRepo;
+@inject IProfesionalDetalleRepositorio DetalleRepo;
+@inject NavigationManager NavigationManager;
+@inject SweetAlertService swal;
+
+
+<EditForm Model="profesional" OnValidSubmit="Guardar">
+
+
+   
+    <DataAnnotationsValidator />
+    <div class="form-group row">
+   <div class="border p-3 w-75" style="margin: 0 auto; width: 50%;">
+        <h2 class="text-info pl-3">Registro Profesionales</h2>
+        <div class="row">
+        <div class="container">
+            <MudTextField hidden @bind-Value="profesional.ProfesionalId" class="" />
+            <div class="mb-3">
+                <label>Nombre</label>
+                <MudTextField @bind-Value="profesional.NombreCompleto" class="" />
+                <ValidationMessage For="@(() => profesional.NombreCompleto)" />
+            </div>
+            <div class="mb-3">
+                <label>Especialidad</label>
+                <MudTextField @bind-Value="profesional.Especialidad" class="" />
+                <ValidationMessage For="@(() => profesional.Especialidad)" />
+            </div>
+                    <div class="mb-3">
+                        <label>Telefono</label>
+                        <MudTextField @bind-Value="profesional.Telefono" class="" />
+                        <ValidationMessage For="@(() => profesional.Telefono)" />
+                    </div>
+                    <div class="mb-3">
+                        <label>Fecha Nacimiento</label>
+                        <InputDate @bind-Value="profesional.FechaNacimiento" class="" />
+                        <ValidationMessage For="@(() => profesional.FechaNacimiento)" />
+                    </div>
+            <CardFooter>
+                <MudIconButton Icon="@Icons.Material.Filled.Save" aria-label="Guardar" ButtonType="MudBlazor.ButtonType.Submit"></MudIconButton>
+
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="Delete"></MudIconButton>
+            </CardFooter>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </EditForm>
+
+
+@code {
+    [Parameter]
+    public int ProfesionalId { get; set; }
+    public bool eliminado { get; set; }
+    private Profesional profesional = new Profesional();
+    private ProfesionalDetalle profesionalDetalle = new ProfesionalDetalle();
+    private List<ProfesionalDetalle> profesionalDetalles = new List<ProfesionalDetalle>();
+    private List<Servicio> servicios = new List<Servicio>();
+    private List<Profesional> Profe = new List<Profesional>(); 
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        servicios = await ServicioRepo.GetServicio();
+        if (ProfesionalId != 0)
+        {
+            profesional = await ProfesionalRepo.GetProfesionalPorIdAsync(ProfesionalId);
+        }
+    }
+    public async Task Guardar()
+    {
+        if (profesional.ProfesionalId == 0)
+        {
+            await ProfesionalRepo.CreateProfesional(profesional);
+            Nuevo();
+            alert();
+            IrAProfesionalDetalle();
+        }
+        else
+        {
+            await ProfesionalRepo.UpdateProfesional(profesional);
+            Nuevo();
+            alert1();
+            IrAProfesionalDetalle();
+        }
+
+    }
+
+    public void Nuevo()
+    {
+        profesional = new Profesional();
+    }
+    public async Task Buscar()
+    {
+        profesional= await ProfesionalRepo.GetProfesionalPorIdAsync(profesional.ProfesionalId);
+    }
+    public void Delete()
+    {
+        alert3();
+    }
+
+    public async Task Remove()
+    {
+        if (profesional != null)
+        {
+            eliminado = await ProfesionalRepo.DeleteProfesional(profesional.ProfesionalId);
+            if (eliminado)
+            {
+                Nuevo();
+            }
+        }
+    }
+    private void IrAProfesionalDetalle()
+    {
+        NavigationManager.NavigateTo("R_ProfesionalDetalle");
+    }
+    public async void alert()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Exito",
+                Text = "Guardado con exito!!!",
+                Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+    public async void alert1()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Exito",
+                Text = "Editado con exito!!!",
+                Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+    public async void alert3()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Estas Seguro?",
+                Text = "No podras revertirlo",
+                Icon = SweetAlertIcon.Warning,
+                ConfirmButtonText = "Si, Eliminar",
+                ShowCancelButton = true,
+                CancelButtonText = "No"
+            });
+        if (res.IsConfirmed)
+        {
+            await Remove();
+            Nuevo();
+        }
+    }
+}
+   
