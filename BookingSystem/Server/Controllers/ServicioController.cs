@@ -63,11 +63,11 @@ namespace BookingSystem.Server.Controllers
             var servicioExiste = await ServicioExiste(id);
             if(!servicioExiste)
             {
-                return NotFound();
+                return NotFound("El servicio no Existe");
             }
             _contexto.Update(servicio);
             await _contexto.SaveChangesAsync();
-            return Ok(true);
+            return Ok("Actualizado con Exito");
         }
 
         private async Task<bool> ServicioExiste(int id)

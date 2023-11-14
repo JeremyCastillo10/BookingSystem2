@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>BookingSystem.Server-aa1f03d6-942e-4834-9d86-0e38543a69f5</UserSecretsId>
   </PropertyGroup>

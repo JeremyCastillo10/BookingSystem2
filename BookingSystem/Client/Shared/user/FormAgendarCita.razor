@@ -1,3 +1,89 @@
-﻿@page "/_AgendaTuCitaForm"
-<h1>Agende su cita</h1>
-@code{}
+﻿@page "/AgendarCitaForm"
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize]
+@inject IServicioRepositorio ServicioRepo;
+@inject IProfesionalRepositorio ProfesionalRepo;
+<EditForm Model="Cita" OnSubmit="Guardar">
+<div id="booking" class="section">
+    <div class="section-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-md-push-5">
+                    <div class="booking-cta">
+                        <h1>Make your reservation</h1>
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi facere, soluta magnam consectetur molestias itaque
+                            ad sint fugit architecto incidunt iste culpa perspiciatis possimus voluptates aliquid consequuntur cumque quasi.
+                            Perspiciatis.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-md-pull-7">
+                    <div class="booking-form">
+                            <div class="form-group">
+                                    
+                                <span class="form-label">Servicio</span>
+                                <select class="form-control" @bind="Cita.ServicioId">
+                                    <option></option>
+                                    @foreach (var serv in servicios)
+                                    {
+                                        <option value="@serv.ServicioId">@serv.Nombre</option>
+                                    }
+                                </select>
+                                <br />
+                                <span class="form-label">Profesional</span>
+                                <select class="form-control" @bind="Cita.ProfesionalId">
+                                    <option></option>
+                                    @foreach (var pro in profesionales)
+                                    {
+                                        <option value="@pro.ProfesionalId">@pro.NombreCompleto</option>
+                                    }
+                                </select>
+                                <br />
+                                <span class="form-label">Dia</span>
+                                <input class="form-control" type="date" required>
+                                <br />
+                                <span class="form-label">Hora Cita</span>
+                                <select class="form-control" @bind="Cita.Hora">
+                                    <option></option>
+                                    @foreach (var hor in horas)
+                                    {
+                                        <option value="@hor">@hor</option>
+                                    }
+                                </select>
+                                <br />
+                            </div>
+                            <div class="form-btn">
+                                <button class="submit-btn">Verificar Disponibilidad</button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</EditForm>
+
+@code{
+    [Parameter]
+    public int id { get; set; }
+    public Cita Cita { get; set; } = new Cita();
+    List<string> horas = new List<string>
+        {
+            "8:00 a.m.", "9:00 a.m.", "10:00 a.m.", "11:00 a.m.",
+            "12:00 p.m.", "1:00 p.m.", "2:00 p.m.", "3:00 p.m.",
+            "4:00 p.m.", "5:00 p.m.", "6:00 p.m."
+        };
+    public List<Servicio> servicios { get; set; } = new List<Servicio>();
+    public List<Profesional> profesionales { get; set; } = new List<Profesional>();
+    protected override async Task OnInitializedAsync()
+    {
+        servicios = await ServicioRepo.GetServicio();
+        profesionales = await ProfesionalRepo.GetProfesional();
+
+    }
+    public void Guardar()
+    {
+        
+    }
+}

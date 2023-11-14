@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystem.Server", "BookingSystem\Server\BookingSystem.Server.csproj", "{5CB88180-6798-4FBF-8066-1CCB05D2F4FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSystem.Server", "BookingSystem\Server\BookingSystem.Server.csproj", "{5CB88180-6798-4FBF-8066-1CCB05D2F4FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystem.Client", "BookingSystem\Client\BookingSystem.Client.csproj", "{2192C442-FC49-4F8A-AA5F-D0965531BD22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSystem.Client", "BookingSystem\Client\BookingSystem.Client.csproj", "{2192C442-FC49-4F8A-AA5F-D0965531BD22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystem.Shared", "BookingSystem\Shared\BookingSystem.Shared.csproj", "{22E4569D-410E-4BD9-8D0A-9CC863A83B93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSystem.Shared", "BookingSystem\Shared\BookingSystem.Shared.csproj", "{22E4569D-410E-4BD9-8D0A-9CC863A83B93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

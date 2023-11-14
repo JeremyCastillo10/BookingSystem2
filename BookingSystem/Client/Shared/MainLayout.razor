@@ -1,8 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@* @inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenuCliente />
     </div>
 
     <main>
@@ -16,3 +16,25 @@
         </article>
     </main>
 </div>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+ *@
+ ﻿@using MudBlazor
+@inherits LayoutComponentBase
+
+<div class="" style="min-height: 100vh;">
+        <NavMenuCliente />
+
+    <main class="flex-grow-1">
+        @Body
+    </main>
+</div>
+
+<footer class="">
+    <Footer></Footer>
+</footer>
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
