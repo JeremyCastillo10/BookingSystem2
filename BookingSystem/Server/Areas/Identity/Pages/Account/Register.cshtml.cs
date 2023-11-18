@@ -26,6 +26,7 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -36,7 +37,8 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +46,7 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -98,11 +101,21 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required(ErrorMessage = "El nombre es Obligatorio")]
+            public string NombreCompleto { get; set; }
+            [Phone]
+            [Required(ErrorMessage = "El telefono es Obligatorio")]
+            public string PhoneNumber { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (!await _roleManager.RoleExistsAsync(WC.AdminRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(WC.AdminRole));
+                await _roleManager.CreateAsync(new IdentityRole(WC.UserRole));
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -113,7 +126,13 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = new ApplicationUser()
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    PhoneNumber = Input.PhoneNumber,
+                    NombreCompleto = Input.NombreCompleto
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -121,6 +140,15 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    //if (User.IsInRole(WC.AdminRole))
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    //}
+                    //else
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, WC.UserRole);
+                    //}
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

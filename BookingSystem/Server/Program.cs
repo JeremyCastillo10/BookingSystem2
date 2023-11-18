@@ -2,6 +2,7 @@ global using BookingSystem.Shared;
 using BookingSystem.Server.Data;
 using BookingSystem.Server.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,9 @@ builder.Services.AddDbContext<Contexto>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<Contexto>();
+
 
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, Contexto>();
