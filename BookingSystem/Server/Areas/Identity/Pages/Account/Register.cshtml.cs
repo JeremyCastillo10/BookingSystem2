@@ -106,6 +106,8 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
             [Phone]
             [Required(ErrorMessage = "El telefono es Obligatorio")]
             public string PhoneNumber { get; set; }
+            [Key]
+            public int UsuarioId { get; set; }
         }
 
 
@@ -131,7 +133,8 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
                     UserName = Input.Email,
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
-                    NombreCompleto = Input.NombreCompleto
+                    NombreCompleto = Input.NombreCompleto,
+                    UsuarioId = Input.UsuarioId,
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

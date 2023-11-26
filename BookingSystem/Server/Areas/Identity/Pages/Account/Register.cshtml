@@ -11,6 +11,7 @@
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
+
             <div class="form-floating">
                 <input asp-for="Input.NombreCompleto" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.NombreCompleto">Nombre Completo</label>

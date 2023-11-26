@@ -4,10 +4,12 @@ using Blazorise.Icons.Material;
 using Blazorise.Material;
 using BookingSystem.Client;
 using BookingSystem.Client.Repositorios;
+using BookingSystem.Server.Models;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Identity;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

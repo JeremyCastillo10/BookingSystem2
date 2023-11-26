@@ -1,8 +1,12 @@
 ﻿@page "/AgendarCitaForm"
 @using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using System.Security.Claims;
 @attribute [Authorize]
 @inject IServicioRepositorio ServicioRepo;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IProfesionalRepositorio ProfesionalRepo;
+
 <EditForm Model="Cita" OnSubmit="Guardar">
 <div id="booking" class="section">
     <div class="section-center">
@@ -21,7 +25,7 @@
                 <div class="col-md-4 col-md-pull-7">
                     <div class="booking-form">
                             <div class="form-group">
-                                    
+                                    <input hidden @bind-value="Cita.CitaId"/>
                                 <span class="form-label">Servicio</span>
                                 <select class="form-control" @bind="Cita.ServicioId">
                                     <option></option>
@@ -61,13 +65,18 @@
             </div>
         </div>
     </div>
+        <p>@_userId</p>
 </div>
 </EditForm>
+
 
 @code{
     [Parameter]
     public int id { get; set; }
     public Cita Cita { get; set; } = new Cita();
+    private string _authMessage;
+    private string _userId;
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
     List<string> horas = new List<string>
         {
             "8:00 a.m.", "9:00 a.m.", "10:00 a.m.", "11:00 a.m.",
@@ -78,12 +87,28 @@
     public List<Profesional> profesionales { get; set; } = new List<Profesional>();
     protected override async Task OnInitializedAsync()
     {
+        await GetClaimsPrincipalData();
         servicios = await ServicioRepo.GetServicio();
         profesionales = await ProfesionalRepo.GetProfesional();
 
     }
-    public void Guardar()
+    private async Task GetClaimsPrincipalData()
     {
-        
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            _authMessage = $"{user.Identity.Name} is authenticated.";
+            _claims = user.Claims;
+            _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
+        }
+        else
+        {
+            _authMessage = "The user is NOT authenticated.";
+        }
+    }
+    public async Task Guardar()
+    {
     }
 }
