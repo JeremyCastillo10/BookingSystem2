@@ -17,5 +17,6 @@ namespace BookingSystem.Server.Data
         public DbSet<Servicio> Servicio { get; set; }
         public DbSet<ApplicationUser> UsuarioAplicacion { get; set; }
         public DbSet<ProfesionalDetalle> ProfesionalDetalle { get; set; }
+        public DbSet<Cita> Cita { get; set; }
     }
 }

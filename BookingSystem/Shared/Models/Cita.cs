@@ -11,8 +11,8 @@ namespace BookingSystem.Server.Models
         public DateTime Fecha { get; set; } = DateTime.Now;
         public string Hora { get; set; }
         public string Duracion { get; set; }
-        public bool Estado { get; set; }
-        public int ClienteId { get; set; }
+        public string Estado { get; set; }
+        public string UserId { get; set; }
 
         public int ProfesionalId { get; set;}
         public int ServicioId { get; set; }

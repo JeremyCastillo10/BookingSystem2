@@ -24,6 +24,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddScoped<IServicioRepositorio, ServicioRepositorio>();
 builder.Services.AddScoped<IProfesionalRepositorio, ProfesionalRepositorio>();
 builder.Services.AddScoped<IProfesionalDetalleRepositorio, ProfesionalDetalleRepositorio>();
+builder.Services.AddScoped<ICitaRepositorio, CitaRepositorio>();
 
 builder.Services.AddApiAuthorization();
 builder.Services.AddMudServices();

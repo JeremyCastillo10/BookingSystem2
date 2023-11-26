@@ -55,6 +55,26 @@ namespace BookingSystem.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cita",
+                columns: table => new
+                {
+                    CitaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Hora = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duracion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfesionalId = table.Column<int>(type: "int", nullable: false),
+                    ServicioId = table.Column<int>(type: "int", nullable: false),
+                    Visible = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cita", x => x.CitaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -360,6 +380,9 @@ namespace BookingSystem.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Cita");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");

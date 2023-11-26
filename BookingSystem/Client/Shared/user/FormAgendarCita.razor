@@ -6,6 +6,8 @@
 @inject IServicioRepositorio ServicioRepo;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IProfesionalRepositorio ProfesionalRepo;
+@inject ICitaRepositorio CitaRepo
+@inject SweetAlertService swal;
 
 <EditForm Model="Cita" OnSubmit="Guardar">
 <div id="booking" class="section">
@@ -66,6 +68,7 @@
         </div>
     </div>
         <p>@_userId</p>
+        <p>@Cita.UserId</p>
 </div>
 </EditForm>
 
@@ -90,6 +93,9 @@
         await GetClaimsPrincipalData();
         servicios = await ServicioRepo.GetServicio();
         profesionales = await ProfesionalRepo.GetProfesional();
+        Cita.UserId =  _userId;
+        Cita.Estado = "Pendiente";
+        Cita.Duracion = "60";
 
     }
     private async Task GetClaimsPrincipalData()
@@ -110,5 +116,23 @@
     }
     public async Task Guardar()
     {
+        await CitaRepo.CreateCita(Cita);
+        Nuevo();
+        alert();
+    }
+    public void Nuevo()
+    {
+        Cita = new Cita();
+    }
+    public async void alert()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Exito",
+                Text = "Guardado con exito!!!",
+                Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
     }
 }
