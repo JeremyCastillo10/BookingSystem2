@@ -6,5 +6,6 @@ namespace BookingSystem.Client.Repositorios
     {
         Task<List<Cita>> GetCita();
         Task CreateCita(Cita cita);
+        Task<bool> ExisteCita(string hora, DateTime fecha, int profesionalId, int servicioId);
     }
 }

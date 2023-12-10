@@ -1,30 +1,11 @@
-﻿@* @inherits LayoutComponentBase
-
-<div class="page">
-    <div class="sidebar">
-        <NavMenuCliente />
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
- *@
- ﻿@using MudBlazor
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using System.Security.Claims;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="" style="min-height: 100vh;">
-        <NavMenuCliente />
+    <NavMenuCliente></NavMenuCliente>
     <main class="flex-grow-1">
         @Body
     </main>
@@ -33,7 +14,44 @@
 <footer class="">
     <Footer></Footer>
 </footer>
-
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+@code {
+    private string _userId;
+    private ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetClaimsPrincipalData();
+    }
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+    }
+}
+
+
+        @* <div class="page">
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+
+            <main>
+                <div class="top-row px-4 auth">
+                    <LoginDisplay />
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </div>
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div> *@
+
+
+
+
+
+

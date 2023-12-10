@@ -118,9 +118,15 @@ namespace BookingSystem.Server.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaCita")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Hora")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("MontoTotal")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProfesionalId")
                         .HasColumnType("int");

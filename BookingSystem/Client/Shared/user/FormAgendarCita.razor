@@ -8,6 +8,7 @@
 @inject IProfesionalRepositorio ProfesionalRepo;
 @inject ICitaRepositorio CitaRepo
 @inject SweetAlertService swal;
+@inject NavigationManager Navigation
 
 <EditForm Model="Cita" OnSubmit="Guardar">
 <div id="booking" class="section">
@@ -47,7 +48,7 @@
                                 </select>
                                 <br />
                                 <span class="form-label">Dia</span>
-                                <input class="form-control" type="date" required>
+                                <input @bind="Cita.Fecha" class="form-control" type="date" required>
                                 <br />
                                 <span class="form-label">Hora Cita</span>
                                 <select class="form-control" @bind="Cita.Hora">
@@ -60,7 +61,7 @@
                                 <br />
                             </div>
                             <div class="form-btn">
-                                <button class="submit-btn">Verificar Disponibilidad</button>
+                                <button class="submit-btn" @onclick="VerificarDisponibilidad">Verificar Disponibilidad</button>
                             </div>
                     </div>
                 </div>
@@ -82,14 +83,16 @@
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
     List<string> horas = new List<string>
         {
-            "8:00 a.m.", "9:00 a.m.", "10:00 a.m.", "11:00 a.m.",
-            "12:00 p.m.", "1:00 p.m.", "2:00 p.m.", "3:00 p.m.",
-            "4:00 p.m.", "5:00 p.m.", "6:00 p.m."
+            "8:00", "9:00", "10:00", "11:00",
+            "12:00", "13:00", "14:00", "15:00",
+            "16:00", "17:00", "18:00"
         };
     public List<Servicio> servicios { get; set; } = new List<Servicio>();
     public List<Profesional> profesionales { get; set; } = new List<Profesional>();
     protected override async Task OnInitializedAsync()
     {
+        Cita.Fecha = DateTime.Now;
+        Cita.Fecha.ToString("MM/dd/yyyy");
         await GetClaimsPrincipalData();
         servicios = await ServicioRepo.GetServicio();
         profesionales = await ProfesionalRepo.GetProfesional();
@@ -124,6 +127,13 @@
     {
         Cita = new Cita();
     }
+    private async void VerificarDisponibilidad()
+    {
+
+        Navigation.NavigateTo($"/ResumenCita/{Cita.Fecha:yyyy-MM-dd HH:mm:ss}/{Cita.Hora}/{Cita.Duracion}/{Cita.ServicioId}/{Cita.ProfesionalId}/{Cita.UserId}/{Cita.Estado}");
+       
+    }
+    
     public async void alert()
     {
         var res = await swal.FireAsync(new SweetAlertOptions

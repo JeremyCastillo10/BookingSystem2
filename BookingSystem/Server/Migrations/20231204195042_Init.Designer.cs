@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Server.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231126160138_Init")]
+    [Migration("20231204195042_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -121,9 +121,15 @@ namespace BookingSystem.Server.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("FechaCita")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Hora")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("MontoTotal")
+                        .HasColumnType("float");
 
                     b.Property<int>("ProfesionalId")
                         .HasColumnType("int");

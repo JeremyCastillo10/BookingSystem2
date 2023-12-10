@@ -3,9 +3,11 @@ using Blazorise;
 using Blazorise.Icons.Material;
 using Blazorise.Material;
 using BookingSystem.Client;
+using BookingSystem.Client.Auth;
 using BookingSystem.Client.Repositorios;
 using BookingSystem.Server.Models;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,11 +22,13 @@ builder.Services.AddHttpClient("BookingSystem.ServerAPI", client => client.BaseA
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
+//builder.Services.AddSingleton<AuthenticationStateProvider, MyAuthenticationStateProvider>();
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BookingSystem.ServerAPI"));
 builder.Services.AddScoped<IServicioRepositorio, ServicioRepositorio>();
 builder.Services.AddScoped<IProfesionalRepositorio, ProfesionalRepositorio>();
 builder.Services.AddScoped<IProfesionalDetalleRepositorio, ProfesionalDetalleRepositorio>();
 builder.Services.AddScoped<ICitaRepositorio, CitaRepositorio>();
+
 
 builder.Services.AddApiAuthorization();
 builder.Services.AddMudServices();

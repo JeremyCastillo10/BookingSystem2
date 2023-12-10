@@ -8,15 +8,15 @@ namespace BookingSystem.Server.Models
         [Key]
         public int CitaId { get; set; }
 
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; }
+        public DateTime FechaCita { get; set; } = DateTime.Now;
         public string Hora { get; set; }
         public string Duracion { get; set; }
         public string Estado { get; set; }
         public string UserId { get; set; }
-
         public int ProfesionalId { get; set;}
         public int ServicioId { get; set; }
-
+        public double MontoTotal { get; set; }
         public bool Visible { get; set; } = true;
     }
 }

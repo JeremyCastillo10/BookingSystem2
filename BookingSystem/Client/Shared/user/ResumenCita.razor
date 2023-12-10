@@ -1,0 +1,128 @@
+﻿@page "/ResumenCita/{fecha}/{hora}/{duracion}/{servicio}/{profesional}/{userid}/{estado}"
+@inject ICitaRepositorio CitaRepo
+@inject IServicioRepositorio ServicioRepo
+@inject IProfesionalRepositorio ProfesionalRepo
+@inject ICitaRepositorio CitaRepo
+@inject NavigationManager Navigation
+@inject SweetAlertService swal;
+
+<MudCard Style="width:50%" Class="">
+    <MudCardHeader>
+        <h3 class="mb-0">Resumen de la Cita</h3>
+    </MudCardHeader>
+    <MudCardContent>
+        <dl class="row">
+            <dt class="col-sm-3">Fecha:</dt>
+            <dd class="col-sm-9">@DateTime.Parse(fecha).ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Duración:</dt>
+            <dd class="col-sm-9">@duracion</dd>
+            <dt class="col-sm-3">Hora:</dt>
+            <dd class="col-sm-9">@hora</dd>
+
+            <dt class="col-sm-3">Servicio:</dt>
+            <dd class="col-sm-9">
+                @foreach (var ser in servicios.Where(s => s.ServicioId == int.Parse(servicio)))
+                {
+                    if (servicio != null)
+                    {
+                        @ser.Nombre
+                    }
+                }
+            </dd>
+
+            <dt class="col-sm-3">Profesional:</dt>
+            <dd class="col-sm-9">
+                @foreach (var pro in profesionales.Where(s => s.ProfesionalId == int.Parse(profesional)))
+                {
+                    if (profesional != null)
+                    {
+                        @pro.NombreCompleto
+                    }
+                }
+            </dd>
+
+            <!-- Add more details as needed -->
+        </dl>
+
+        <div class="text-center">
+            <Button @onclick="GuardarCita">Guardar Cita</Button>
+        </div>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public string fecha { get; set; }
+    [Parameter]
+    public string duracion { get; set; }
+    [Parameter]
+    public string servicio { get; set; }
+    [Parameter]
+    public string profesional { get; set; }
+    [Parameter]
+    public string hora { get; set; }
+    [Parameter]
+    public string userid { get; set; }
+    [Parameter]
+    public string estado { get; set; }
+
+    public List<Servicio> servicios { get; set; } = new List<Servicio>();
+    public List<Profesional> profesionales { get; set; } = new List<Profesional>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        servicios = await ServicioRepo.GetServicio(); 
+        profesionales = await ProfesionalRepo.GetProfesional();
+    }
+
+    private async Task GuardarCita()
+    {
+        bool existeCita = await CitaRepo.ExisteCita(hora, DateTime.Parse(fecha), int.Parse(profesional), int.Parse(servicio));
+
+        if(!existeCita)
+        {
+            var cita = new Cita
+                {
+                    Fecha = DateTime.Parse(fecha),
+                    Duracion = duracion,
+                    ServicioId = int.Parse(servicio),
+                    ProfesionalId = int.Parse(profesional),
+                    Hora = hora,
+                    UserId = userid,
+                    Estado = estado
+                };
+
+            await CitaRepo.CreateCita(cita);
+            alert();
+            
+        }
+        alertExiste();
+
+           
+
+       
+    }
+    public async void alert()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Exito",
+                Text = "Guardado con exito!!!",
+                Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+    public async void alertExiste()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Error",
+                Text = "Ya existe!!!",
+                Icon = SweetAlertIcon.Error,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+}
