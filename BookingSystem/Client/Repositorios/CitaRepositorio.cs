@@ -11,9 +11,10 @@ namespace BookingSystem.Client.Repositorios
         { 
             _http = httpClient;
         }
-        public async Task CreateCita(Cita cita)
+        public async Task<bool> CreateCita(Cita cita)
         {
-            var responde = await _http.PostAsJsonAsync("api/Cita/Guardar", cita);
+            var responde = await _http.PostAsJsonAsync("api/Cita/Guarda", cita);
+            return responde.IsSuccessStatusCode;
         }
 
         public Task<List<Cita>> GetCita()

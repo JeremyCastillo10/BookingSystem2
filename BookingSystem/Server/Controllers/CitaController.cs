@@ -41,6 +41,26 @@ namespace BookingSystem.Server.Controllers
                 return Ok(false);
             }
         }
+        [HttpPost]
+        [Route("Guarda")]
+        public async Task<ActionResult> PostCita2(Cita cita)
+        {
+            // Verificar si ya existe una cita con la misma información
+            bool citaExistente = await _contexto.Cita.AnyAsync(c => c.Hora == cita.Hora && c.Fecha == cita.Fecha && c.ProfesionalId == cita.ProfesionalId && c.ServicioId ==  cita.ServicioId);
+
+            if (citaExistente)
+            {
+                // Puedes devolver un error o un mensaje indicando que la cita ya existe
+                return BadRequest("Ya existe una cita con la misma información.");
+            }
+
+            // Si no existe, agregar la nueva cita a la base de datos
+            _contexto.Add(cita);
+            await _contexto.SaveChangesAsync();
+
+            return Ok(cita);
+        }
+
 
 
 
@@ -50,6 +70,7 @@ namespace BookingSystem.Server.Controllers
         [Route("Guardar")]
         public async Task<ActionResult> PostCita(Cita cita)
         {
+
             _contexto.Add(cita);
             await _contexto.SaveChangesAsync();
             return Ok(cita);

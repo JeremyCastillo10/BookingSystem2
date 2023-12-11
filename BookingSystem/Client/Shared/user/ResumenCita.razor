@@ -45,9 +45,6 @@
             <!-- Add more details as needed -->
         </dl>
 
-        <div class="text-center">
-            <Button @onclick="GuardarCita">Guardar Cita</Button>
-        </div>
     </MudCardContent>
 </MudCard>
 
@@ -76,53 +73,4 @@
         profesionales = await ProfesionalRepo.GetProfesional();
     }
 
-    private async Task GuardarCita()
-    {
-        bool existeCita = await CitaRepo.ExisteCita(hora, DateTime.Parse(fecha), int.Parse(profesional), int.Parse(servicio));
-
-        if(!existeCita)
-        {
-            var cita = new Cita
-                {
-                    Fecha = DateTime.Parse(fecha),
-                    Duracion = duracion,
-                    ServicioId = int.Parse(servicio),
-                    ProfesionalId = int.Parse(profesional),
-                    Hora = hora,
-                    UserId = userid,
-                    Estado = estado
-                };
-
-            await CitaRepo.CreateCita(cita);
-            alert();
-            
-        }
-        alertExiste();
-
-           
-
-       
-    }
-    public async void alert()
-    {
-        var res = await swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "Exito",
-                Text = "Guardado con exito!!!",
-                Icon = SweetAlertIcon.Success,
-                ConfirmButtonText = "OK"
-
-            });
-    }
-    public async void alertExiste()
-    {
-        var res = await swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "Error",
-                Text = "Ya existe!!!",
-                Icon = SweetAlertIcon.Error,
-                ConfirmButtonText = "OK"
-
-            });
-    }
 }

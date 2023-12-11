@@ -61,7 +61,7 @@
                                 <br />
                             </div>
                             <div class="form-btn">
-                                <button class="submit-btn" @onclick="VerificarDisponibilidad">Verificar Disponibilidad</button>
+                                <button class="submit-btn"type="submit">Verificar Disponibilidad</button>
                             </div>
                     </div>
                 </div>
@@ -119,15 +119,24 @@
     }
     public async Task Guardar()
     {
-        await CitaRepo.CreateCita(Cita);
-        Nuevo();
-        alert();
+        bool guardado = await CitaRepo.CreateCita(Cita);
+
+        if (guardado)
+        {
+            alert();
+            IrAResumunCita();
+        }
+        else
+        {
+            alertExiste();
+        }
     }
+
     public void Nuevo()
     {
         Cita = new Cita();
     }
-    private async void VerificarDisponibilidad()
+    private async void IrAResumunCita()
     {
 
         Navigation.NavigateTo($"/ResumenCita/{Cita.Fecha:yyyy-MM-dd HH:mm:ss}/{Cita.Hora}/{Cita.Duracion}/{Cita.ServicioId}/{Cita.ProfesionalId}/{Cita.UserId}/{Cita.Estado}");
@@ -141,6 +150,17 @@
                 Title = "Exito",
                 Text = "Guardado con exito!!!",
                 Icon = SweetAlertIcon.Success,
+                ConfirmButtonText = "OK"
+
+            });
+    }
+    public async void alertExiste()
+    {
+        var res = await swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Error",
+                Text = "Ya existe una Cita!!!",
+                Icon = SweetAlertIcon.Error,
                 ConfirmButtonText = "OK"
 
             });
