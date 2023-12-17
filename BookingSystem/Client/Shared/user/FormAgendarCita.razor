@@ -61,7 +61,7 @@
                                 <br />
                             </div>
                             <div class="form-btn">
-                                <button class="submit-btn"type="submit">Verificar Disponibilidad</button>
+                                <button class="submit-btn"type="submit">Agendar Cita</button>
                             </div>
                     </div>
                 </div>
@@ -111,6 +111,7 @@
             _authMessage = $"{user.Identity.Name} is authenticated.";
             _claims = user.Claims;
             _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
+
         }
         else
         {
@@ -159,7 +160,7 @@
         var res = await swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Error",
-                Text = "Ya existe una Cita!!!",
+                Text = "Lo siento, El profesional estara ocupado a esta hora, elija otro profesional",
                 Icon = SweetAlertIcon.Error,
                 ConfirmButtonText = "OK"
 

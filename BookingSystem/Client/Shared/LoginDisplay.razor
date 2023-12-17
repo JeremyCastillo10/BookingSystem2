@@ -6,6 +6,10 @@
     <Authorized>
         <a href="authentication/profile">Hello, @context.User.Identity?.Name!</a>
         <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
+        @if(context.User.IsInRole(WC.AdminRole))
+        {
+            <a href="admin/dashboard">Dashboard</a>
+        }
     </Authorized>
     <NotAuthorized>
         <a href="authentication/register">Register</a>

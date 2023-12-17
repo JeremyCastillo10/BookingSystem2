@@ -6,47 +6,91 @@
 @inject NavigationManager Navigation
 @inject SweetAlertService swal;
 
-<MudCard Style="width:50%" Class="">
-    <MudCardHeader>
-        <h3 class="mb-0">Resumen de la Cita</h3>
-    </MudCardHeader>
-    <MudCardContent>
-        <dl class="row">
-            <dt class="col-sm-3">Fecha:</dt>
-            <dd class="col-sm-9">@DateTime.Parse(fecha).ToString("dd/MM/yyyy")</dd>
+<form method="post">
+    <input hidden asp-for="orden.Id" />
+    <br />
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-light ml-0 row container" style="color:plum">
+                <div class="col-15 d-none d-md-block col-md-6 pb-1">
+                    &nbsp; Resumen de la Cita
+                </div>
+                <div class="col-12 col-md-4 offset-md-2 text-right">
+                    <a class="btn bg-white btn-outline-info form-control btn-sm" href="/AgendarCitaForm">Regresar</a>
+                </div>
+            </div>
+            <div class="card-body pb-0">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row">
+                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="text" style="color:black">Detalles</span>
+                                    <a class="btn"><i class="oi oi-print"></i></a>
+                                </h4>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Fecha</div>
+                                <div class="col-9">
+                                    <input readonly type="text" value="@DateTime.Parse(fecha).ToString("dd/MM/yyyy")" class="form-control" />
+                                    <span asp-validation-for="@fecha" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Duracion</div>
+                                <div class="col-9">
+                                    <input readonly value="@duracion" type="text" class="form-control" />
+                                    <span asp-validation-for="@duracion" class="text-danger"></span>
+                                </div>
+                            </div>
 
-            <dt class="col-sm-3">Duración:</dt>
-            <dd class="col-sm-9">@duracion</dd>
-            <dt class="col-sm-3">Hora:</dt>
-            <dd class="col-sm-9">@hora</dd>
+                            <div class="row my-1">
+                                <div class="col-3">Hora</div>
+                                <div class="col-9">
+                                    <input readonly type="text" value="@hora" class="form-control" />
+                                    <span asp-validation-for="@hora" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-3">Servicio</div>
+                                <div class="col-9">
+                                    @foreach (var ser in servicios.Where(s => s.ServicioId == int.Parse(servicio)))
+                                    {
+                                        if (servicio != null)
+                                        {
+                                            @ser.Nombre
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="row my-1 ">
+                                <div class="col-3">Profesional</div>
+                                <div class="col-9">
+                                    @foreach (var pro in profesionales.Where(s => s.ProfesionalId == int.Parse(profesional)))
+                                    {
+                                        if (profesional != null)
+                                        {
+                                            @pro.NombreCompleto
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 pb-4">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                            </h4>
+                            <ul class="list-group mb-3">
+                                <ConfirmacionCita></ConfirmacionCita>
 
-            <dt class="col-sm-3">Servicio:</dt>
-            <dd class="col-sm-9">
-                @foreach (var ser in servicios.Where(s => s.ServicioId == int.Parse(servicio)))
-                {
-                    if (servicio != null)
-                    {
-                        @ser.Nombre
-                    }
-                }
-            </dd>
-
-            <dt class="col-sm-3">Profesional:</dt>
-            <dd class="col-sm-9">
-                @foreach (var pro in profesionales.Where(s => s.ProfesionalId == int.Parse(profesional)))
-                {
-                    if (profesional != null)
-                    {
-                        @pro.NombreCompleto
-                    }
-                }
-            </dd>
-
-            <!-- Add more details as needed -->
-        </dl>
-
-    </MudCardContent>
-</MudCard>
+                            </ul>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @code {
     [Parameter]

@@ -176,6 +176,7 @@ namespace BookingSystem.Server.Migrations
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duracion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Precio = table.Column<double>(type: "float", nullable: false),
+                    ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Visible = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

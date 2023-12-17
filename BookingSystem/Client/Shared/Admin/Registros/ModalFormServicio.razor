@@ -38,6 +38,10 @@
             <MudNumericField @bind-Value="servicio.Precio" class="" />
             <ValidationMessage For="@(() => servicio.Precio)" />
         </div>
+                <div class="mb-3">
+                    <label>Precio</label>
+                    <MudTextField @bind-Value="servicio.ImagenUrl" class="" />
+                </div>
 
     </ModalBody>
     <ModalFooter>

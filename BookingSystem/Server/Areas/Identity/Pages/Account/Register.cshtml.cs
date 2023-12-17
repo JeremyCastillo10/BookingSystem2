@@ -132,6 +132,7 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     PhoneNumber = Input.PhoneNumber,
                     NombreCompleto = Input.NombreCompleto,
+                    
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -140,15 +141,15 @@ namespace BookingSystem.Server.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, WC.AdminRole);
-                    //if (User.IsInRole(WC.AdminRole))
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, WC.AdminRole);
-                    //}
-                    //else
-                    //{
-                    //    await _userManager.AddToRoleAsync(user, WC.UserRole);
-                    //}
+                    //await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    if (User.IsInRole(WC.AdminRole))
+                    {
+                        await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, WC.UserRole);
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

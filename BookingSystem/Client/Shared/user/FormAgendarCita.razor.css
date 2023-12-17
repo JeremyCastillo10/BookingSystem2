@@ -14,7 +14,7 @@
 
 #booking {
     font-family: 'Montserrat', sans-serif;
-    background-image: url('imagenes/citabacka.jpg');
+    background-image: url('imagenes/salon2.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -26,7 +26,8 @@
         right: 0;
         bottom: 0;
         top: 0;
-        background: rgba(47, 103, 177, 0.6);
+        background: rgba(10, 10, 5, 0.8);
+        
     }
 
 .booking-form {

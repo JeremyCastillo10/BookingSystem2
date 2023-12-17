@@ -18,6 +18,7 @@ namespace BookingSystem.Server.Models
         public string Duracion { get; set; }
         [Required(ErrorMessage = "Campo obligatorio")]
         public double Precio { get; set; }
+        public string ImagenUrl { get; set; }
         public bool Visible { get; set; } = true;
     }
 }

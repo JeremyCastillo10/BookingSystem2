@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Server.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231204195042_Init")]
+    [Migration("20231217165759_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -218,6 +218,10 @@ namespace BookingSystem.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Duracion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

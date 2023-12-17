@@ -2,10 +2,19 @@
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using System.Security.Claims;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
 <div class="" style="min-height: 100vh;">
-    <NavMenuCliente></NavMenuCliente>
+    <AuthorizeView>
+        <Authorized>
+            <NavMenuCliente></NavMenuCliente>
+        </Authorized>
+        <NotAuthorized>
+            <NavMenuCliente></NavMenuCliente>
+        </NotAuthorized>
+</AuthorizeView>
     <main class="flex-grow-1">
         @Body
     </main>
