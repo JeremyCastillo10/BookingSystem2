@@ -1,0 +1,105 @@
+﻿@page "/HistorialCitas"
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+@inject ICitaRepositorio CitaRepositorio
+@inject IServicioRepositorio ServicioRepo
+@inject IProfesionalRepositorio ProfesionalRepo
+
+
+
+
+@if (lista != null && lista.Any())
+{
+<h1 class="text-center">Historial de Citas</h1>
+    <table class="table w-75 m-auto">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+                <th scope="col">Servicio</th>
+                <th scope="col">Profesional</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lista)
+            {
+                <tr>
+                    <th scope="row">@item.CitaId</th>
+                    <td>@item.Fecha.ToString("MMMM dd, yyyy")</td>
+                    <td>@item.Hora</td>
+                    <td>
+                        @foreach (var ser in servicios.Where(s => s.ServicioId == item.ServicioId))
+                        {
+                            if (item.ServicioId != 0)
+                            {
+                                @ser.Nombre
+                            }
+                        }
+                    </td>
+                    <td>
+                        @foreach (var ser in profesionales.Where(s => s.ProfesionalId == item.ProfesionalId))
+                        {
+                            if (item.ProfesionalId != 0)
+                            {
+                                @ser.NombreCompleto
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay citas disponibles.</p>
+    <p>@_userId</p>
+}
+
+
+@code {
+
+    private List<Cita> lista = new List<Cita>();
+
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+    private string _authMessage;
+    private string _userId;
+    private string _roleName;
+    public string userRole = null;
+    private List<Servicio> servicios = new List<Servicio>();
+private List<Profesional> profesionales = new List<Profesional>();
+
+    protected override async Task OnInitializedAsync()
+    {  
+        servicios = await ServicioRepo.GetServicio();
+profesionales = await ProfesionalRepo.GetProfesional();
+        await GetClaimsPrincipalData();
+        lista = await CitaRepositorio.GetCitasByUser(_userId);
+        
+    }
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var role = authState.User.IsInRole("Admin");
+        if (user.Identity.IsAuthenticated)
+        {
+            _authMessage = $"{user.Identity.Name} is authenticated.";
+            _claims = user.Claims;
+            _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
+            if (authState.User.IsInRole("Admin"))
+            {
+                userRole = "Admin";
+            }
+        }
+        else
+        {
+            _authMessage = "The user is NOT authenticated.";
+        }
+    }
+}

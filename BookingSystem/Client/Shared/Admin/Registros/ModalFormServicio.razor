@@ -4,8 +4,23 @@
 @inject NavigationManager NavigationManager;
 @using BookingSystem.Client.Shared.Admin.Consultas
 
-<Button Clicked="AbrirModal">Nuevo</Button>
-<ConsultaServicios />
+
+<div class="row">
+        <div class="col-md-3">
+            <MenuAdmin></MenuAdmin>
+        </div>
+
+    <div class="col-md-9">
+        <div class="container">
+            <a onclick="@AbrirModal" style="background-color:lightgray" class="btn">
+                New Service
+                <MudIconButton Icon="@Icons.Material.Filled.MiscellaneousServices"></MudIconButton>
+            </a>
+        </div>
+        <ConsultaServicios></ConsultaServicios>
+    </div>
+</div>
+
 <EditForm Model="servicio" OnValidSubmit="Guardar">
  <Modal @ref="modalRef">
 <ModalContent Size="ModalSize.Large" Centered="true">

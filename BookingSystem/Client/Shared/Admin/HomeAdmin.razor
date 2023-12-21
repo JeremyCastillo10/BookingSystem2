@@ -7,33 +7,34 @@
 @inject NavigationManager NavigationManager;
 
 <AuthorizeView>
-<Authorized>
-        @if (_userId == "32de09be-fe8a-4223-a986-e27428935a50")
-            {
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h1 class="text-center">Welcome Admin</h1>
-                        <a class="btn btn-info" href="ModalServicio">Services</a>
-                        <a class="btn btn-info" href="ModalProfesional">Profesionals</a>
-                    </div>
+    <Authorized>
+        @if (_userId == "c994ef2c-3ac1-4312-9702-4d5849ea8545")
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <MenuAdmin></MenuAdmin>
                 </div>
-                <h3>@userRole</h3>
+                <div class="container">
+                    <h1>
+                        Welcome Admin
+                    </h1>
+
+                </div>
             </div>
-            }
-            else
-            {
-                <p>No Authorizado</p>
-            }
-           
-      
+        }
+        else
+        {
+            <p>No Authorizado</p>
+        }
+
+
     </Authorized>
     <NotAuthorized>
         <p>No Auth</p>
     </NotAuthorized>
 </AuthorizeView>
 
-@code{
+@code {
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
     private string _authMessage;
     private string _userId;

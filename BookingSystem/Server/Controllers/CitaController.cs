@@ -61,11 +61,6 @@ namespace BookingSystem.Server.Controllers
             return Ok(cita);
         }
 
-
-
-
-
-
         [HttpPost]
         [Route("Guardar")]
         public async Task<ActionResult> PostCita(Cita cita)
@@ -75,7 +70,11 @@ namespace BookingSystem.Server.Controllers
             await _contexto.SaveChangesAsync();
             return Ok(cita);
         }
-
-        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Cita>>> GetCitasPorUser(string id)
+        {
+            var response = await _contexto.Cita.Where(c => c.UserId == id).ToListAsync();
+            return Ok(response);
+        }  
     }
 }

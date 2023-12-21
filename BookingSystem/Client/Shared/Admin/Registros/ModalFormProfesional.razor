@@ -5,22 +5,38 @@
 @inject NavigationManager NavigationManager;
 @inject SweetAlertService swal;
 @using BookingSystem.Client.Shared.Admin.Consultas
+<div class="row">
+    <div class="col-md-3">
+        <MenuAdmin></MenuAdmin>
+    </div>
 
-    <Button Clicked="AbrirModal">Nuevo</Button>
-    <ConsultaProfesionales />
+    <div class="col-md-9">
+        <div class="container">
+            <a onclick="@AbrirModal" style="background-color:lightgray" class="btn">
+                New Persona
+                <MudIconButton Icon="@Icons.Material.Filled.People"></MudIconButton>
+            </a>
+        </div>
+        <div class="container">
+            <ConsultaProfesionales></ConsultaProfesionales>
+        </div>
+
+    </div>
+</div>
 <EditForm Model="profesional" OnValidSubmit="Guardar">
 
-<Modal @ref="modalRef">
-    
-    <ModalContent Size="ModalSize.Large" Centered="true"  >
-        
+    <Modal @ref="modalRef">
+
+        <ModalContent Size="ModalSize.Large" Centered="true">
+
+
             <DataAnnotationsValidator />
             <ModalHeader>
                 <ModalTitle>Agregar</ModalTitle>
-                <CloseButton/>
+                <CloseButton />
             </ModalHeader>
             <ModalBody>
-                <br/>
+                <br />
                 <MudTextField hidden @bind-Value="profesional.ProfesionalId" class="" />
                 <div class="mb-3">
                     <label>Nombre</label>
@@ -42,18 +58,18 @@
                     <InputDate @bind-Value="profesional.FechaNacimiento" class="" />
                     <ValidationMessage For="@(() => profesional.FechaNacimiento)" />
                 </div>
-                
+
             </ModalBody>
             <ModalFooter>
                 <MudIconButton Icon="@Icons.Material.Filled.Save" aria-label="Guardar" ButtonType="MudBlazor.ButtonType.Submit"></MudIconButton>
 
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" OnClick="Delete"></MudIconButton>
             </ModalFooter>
-           
-       
-    </ModalContent>
-    
-</Modal>
+
+
+        </ModalContent>
+
+    </Modal>
 </EditForm>
 @code {
     [Parameter]
@@ -109,9 +125,9 @@
     {
         profesional = await ProfesionalRepo.GetProfesionalPorIdAsync(profesional.ProfesionalId);
     }
-    public  void Delete()
+    public void Delete()
     {
-         alert3();
+        alert3();
     }
     public async Task Remove()
     {

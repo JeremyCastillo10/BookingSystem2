@@ -1,4 +1,5 @@
 ﻿using BookingSystem.Server.Models;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Json;
 
@@ -51,6 +52,9 @@ namespace BookingSystem.Client.Repositorios
             }
         }
 
-
+        public async Task<List<Cita>> GetCitasByUser(string userId)
+        {
+            return await _http.GetFromJsonAsync<List<Cita>>($"api/Cita/{userId}");
+        }
     }
 }

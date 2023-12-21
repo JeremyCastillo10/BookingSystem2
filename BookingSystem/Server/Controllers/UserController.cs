@@ -1,5 +1,6 @@
 ﻿using BookingSystem.Server.Data;
 using BookingSystem.Server.Models;
+using BookingSystem.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,5 +23,6 @@ namespace BookingSystem.Server.Controllers
             var response = await _contexto.UsuarioAplicacion.ToListAsync();
             return Ok(response);
         }
+
     }
 }

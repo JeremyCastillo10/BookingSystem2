@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingSystem.Server.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231217165759_Init")]
+    [Migration("20231221155056_Init")]
     partial class Init
     {
         /// <inheritdoc />
