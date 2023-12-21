@@ -3,15 +3,15 @@
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
 <nav class="navbar navbar-expand-lg p-3" style="background-color:darkblue">
     <div class="container-fluid">
-        <a class="navbar-brand" style="color: white" href="#">Beauty Salon</a>
+        <a class="navbar-brand" style="color: white; margin-left: 60px;" href="#">Beauty Salon</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class=" collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ms-auto" style="color: white">
+        <div class="collapse navbar-collapse" id="navbarNavDropdown" style="text-align: center;">
+            <ul class="navbar-nav ms-auto" style="color: white; margin-right: 60px;">
+                <!-- Ajusta el margin-right según tu preferencia -->
                 <li class="nav-item">
                     <a class="nav-link mx-2 active" aria-current="page" href="/">Home</a>
                 </li>
@@ -22,20 +22,15 @@
                     <a class="nav-link mx-2" href="#">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="HistorialCitas">Historial</a>
-                </li>
-
-                <li class="nav-item">
                     <LoginDisplay></LoginDisplay>
                 </li>
-
-
-
             </ul>
         </div>
-
     </div>
 </nav>
+
+
+
 
 @code {
     private ClaimsPrincipal User;
