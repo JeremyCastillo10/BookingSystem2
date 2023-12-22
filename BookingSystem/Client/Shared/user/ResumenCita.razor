@@ -1,4 +1,4 @@
-﻿@page "/ResumenCita/{fecha}/{hora}/{duracion}/{servicio}/{profesional}/{userid}/{estado}"
+﻿@page "/ResumenCita/{fecha}/{hora}/{duracion}/{servicio}/{profesional}/{userid}/{estado}/{monto}"
 @inject ICitaRepositorio CitaRepo
 @inject IServicioRepositorio ServicioRepo
 @inject IProfesionalRepositorio ProfesionalRepo
@@ -74,6 +74,10 @@
                                         }
                                     }
                                 </div>
+                                <br/>
+                            </div>
+                            <div class="col-12 text-start pr-4" style="color:#821f3d">
+                                Monto Total: RD$@string.Format("{0:c}", monto)
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 pb-4">
@@ -107,13 +111,15 @@
     public string userid { get; set; }
     [Parameter]
     public string estado { get; set; }
+    [Parameter]
+    public string monto { get; set; }
 
     public List<Servicio> servicios { get; set; } = new List<Servicio>();
     public List<Profesional> profesionales { get; set; } = new List<Profesional>();
 
     protected override async Task OnInitializedAsync()
     {
-        servicios = await ServicioRepo.GetServicio(); 
+        servicios = await ServicioRepo.GetServicio();
         profesionales = await ProfesionalRepo.GetProfesional();
     }
 

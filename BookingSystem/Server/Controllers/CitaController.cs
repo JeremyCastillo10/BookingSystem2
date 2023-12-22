@@ -75,6 +75,7 @@ namespace BookingSystem.Server.Controllers
         {
             var response = await _contexto.Cita.Where(c => c.UserId == id).ToListAsync();
             return Ok(response);
-        }  
+        }
+     
     }
 }

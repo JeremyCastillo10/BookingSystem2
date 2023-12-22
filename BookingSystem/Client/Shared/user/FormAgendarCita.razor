@@ -37,6 +37,7 @@
                                         <option value="@serv.ServicioId">@serv.Nombre</option>
                                     }
                                 </select>
+
                                 <br />
                                 <span class="form-label">Profesional</span>
                                 <select class="form-control" @bind="Cita.ProfesionalId">
@@ -87,8 +88,11 @@
             "12:00", "13:00", "14:00", "15:00",
             "16:00", "17:00", "18:00"
         };
+
     public List<Servicio> servicios { get; set; } = new List<Servicio>();
     public List<Profesional> profesionales { get; set; } = new List<Profesional>();
+    public Servicio selectedServicio = new Servicio();
+
     protected override async Task OnInitializedAsync()
     {
         Cita.Fecha = DateTime.Now;
@@ -99,6 +103,7 @@
         Cita.UserId =  _userId;
         Cita.Estado = "Pendiente";
         Cita.Duracion = "60";
+
 
     }
     private async Task GetClaimsPrincipalData()
@@ -118,8 +123,14 @@
             _authMessage = "The user is NOT authenticated.";
         }
     }
+    public async Task CalcularMonto()
+    {
+        var servicioSeleccionado = await ServicioRepo.GetServicioPorIdAsync(Cita.ServicioId);
+        Cita.MontoTotal = servicioSeleccionado.Precio;
+    }
     public async Task Guardar()
     {
+        await CalcularMonto();
         bool guardado = await CitaRepo.CreateCita(Cita);
 
         if (guardado)
@@ -140,7 +151,7 @@
     private async void IrAResumunCita()
     {
 
-        Navigation.NavigateTo($"/ResumenCita/{Cita.Fecha:yyyy-MM-dd HH:mm:ss}/{Cita.Hora}/{Cita.Duracion}/{Cita.ServicioId}/{Cita.ProfesionalId}/{Cita.UserId}/{Cita.Estado}");
+        Navigation.NavigateTo($"/ResumenCita/{Cita.Fecha:yyyy-MM-dd HH:mm:ss}/{Cita.Hora}/{Cita.Duracion}/{Cita.ServicioId}/{Cita.ProfesionalId}/{Cita.UserId}/{Cita.Estado}/{Cita.MontoTotal}");
        
     }
     
